@@ -1,36 +1,76 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## 📌 VaultLock Roadmap
 
-## Getting Started
+A secure, modern password manager built with Next.js App Router, Clerk, Prisma, and Bun.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### ✅ MVP (Minimum Viable Product)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- [x] **Initialize Project Repository**
+  - Bun + Next.js App Router + Tailwind CSS + GitHub repo
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- [ ] **Setup Authentication with Clerk**
+  - OAuth (Google, GitHub)
+  - Email/password login with OTP verification
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- [ ] **Configure Database**
+  - Neon PostgreSQL instance
+  - Prisma schema (`User`, `Account` models)
 
-## Learn More
+- [v] **Sync Clerk Users to Database**
+  - Webhook (`user.created`) to sync user + linked OAuth accounts
 
-To learn more about Next.js, take a look at the following resources:
+- [ ] **Implement Encrypted Password Storage**
+  - Web Crypto API to encrypt passwords client-side
+  - Store encrypted data in DB
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 🚀 Version 1
 
-## Deploy on Vercel
+- [ ] **Build Password Vault UI**
+  - Create / Read / Update / Delete (CRUD) password entries
+  - Use Clerk session to show user-specific data
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- [ ] **Decrypt Passwords Securely**
+  - Only decrypt on client after authentication
+  - Never send plain text to server
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [ ] **Password Generator Tool**
+  - Generate strong random passwords
+  - “Copy to Clipboard” button
+
+- [ ] **Deploy to Vercel**
+  - Set environment variables securely
+  - Optimize build and runtime settings
+
+---
+
+### 🌐 Version 2
+
+- [ ] **Sync Vault Across Devices**
+  - Real-time sync or on-login fetch from DB
+  - Background sync on updates
+
+- [ ] **Add 2FA Setup**
+  - Optional two-factor authentication using TOTP
+
+- [ ] **Password Strength Meter**
+  - Evaluate and display password strength during creation
+
+- [ ] **Vault Search & Filtering**
+  - Search by site name, username, tags
+
+- [ ] **(Optional) Vault Sharing**
+  - Share individual password entries with other users (role-based)
+
+---
+
+### 📁 Tech Stack
+
+- Framework: [Next.js App Router](https://nextjs.org/docs/app)
+- Auth: [Clerk.dev](https://clerk.dev/)
+- Database: [Neon PostgreSQL](https://neon.tech/)
+- ORM: [Prisma](https://prisma.io/)
+- Runtime: [Bun](https://bun.sh/)
+- Hosting: [Vercel](https://vercel.com/)
