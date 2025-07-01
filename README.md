@@ -9,7 +9,7 @@ A secure, modern password manager built with Next.js App Router, Clerk, Prisma, 
 - [x] **Initialize Project Repository**
   - Bun + Next.js App Router + Tailwind CSS + GitHub repo
 
-- [ ] **Setup Authentication with Clerk**
+- [x] **Setup Authentication with Clerk**
   - OAuth (Google, GitHub)
   - Email/password login with OTP verification
 
