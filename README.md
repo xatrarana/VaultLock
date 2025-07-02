@@ -13,11 +13,11 @@ A secure, modern password manager built with Next.js App Router, Clerk, Prisma, 
   - OAuth (Google, GitHub)
   - Email/password login with OTP verification
 
-- [ ] **Configure Database**
+- [x] **Configure Database**
   - Neon PostgreSQL instance
-  - Prisma schema (`User`, `Account` models)
+  - Prisma schema (`vault-entry` models)
 
-- [v] **Sync Clerk Users to Database**
+- [ ] **Sync Clerk Users to Database**
   - Webhook (`user.created`) to sync user + linked OAuth accounts
 
 - [ ] **Implement Encrypted Password Storage**
