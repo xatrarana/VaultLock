@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/prisma';
+import { z } from 'zod'
 
 // DELETE - Delete vault entry
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { userId } = await auth();
@@ -14,7 +15,7 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const entryId = params.id;
+    const {id: entryId} = await params;
 
     // Check if entry exists and belongs to user
     const existingEntry = await prisma.vaultEntry.findFirst({
@@ -45,52 +46,57 @@ export async function DELETE(
   }
 }
 
-// PUT - Update vault entry
-export async function PUT(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+const UpdateVaultSchema = z.object({
+  title: z.string(),
+  username: z.string(),
+  encryptedPassword: z.string(),
+  notes: z.string().optional(),
+});
+
+export async function PUT(req:Request,  { params }: { params: Promise<{ id: string }> } ) {
   try {
     const { userId } = await auth();
-    
+
     if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const entryId = params.id;
-    const body = await req.json();
+    const {id: entryId} = await params;
+    const json = await req.json();
+    const body = UpdateVaultSchema.safeParse(json);
 
-    // Check if entry exists and belongs to user
+    if (!body.success) {
+      return NextResponse.json(
+        { error: 'Invalid request body', details: body.error.flatten() },
+        { status: 400 }
+      );
+    }
+
     const existingEntry = await prisma.vaultEntry.findFirst({
-      where: {
-        id: entryId,
-        userId,
-      },
+      where: { id: entryId, userId },
     });
 
     if (!existingEntry) {
-      return NextResponse.json(
-        { error: 'Entry not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Entry not found' }, { status: 404 });
     }
 
     const updatedEntry = await prisma.vaultEntry.update({
       where: { id: entryId },
       data: {
-        title: body.title,
-        username: body.username,
-        encryptedPassword: body.encryptedPassword,
-        notes: body.notes,
+        title: body.data.title,
+        username: body.data.username,
+        encryptedPassword: body.data.encryptedPassword,
+        notes: body.data.notes || '',
         updatedAt: new Date(),
       },
     });
 
     return NextResponse.json(updatedEntry);
   } catch (error) {
-    console.error('Error updating the vault Entry');
+    console.error('Error updating vault entry:', error);
     return NextResponse.json(
-        { error: 'Internal server error' },
-        { status: 500 }
-    )
-  }}
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}
