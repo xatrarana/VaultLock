@@ -4,6 +4,7 @@ import { useUser } from '@clerk/nextjs';
 import { Button } from '@/components/ui/button';
 import { Lock, Plus, User } from 'lucide-react';
 import Link from 'next/link';
+import { UserMenu } from './UserMenu';
 
 export function Header({ onAddEntry }: { onAddEntry?: () => void }) {
   const { user } = useUser();
@@ -28,14 +29,8 @@ export function Header({ onAddEntry }: { onAddEntry?: () => void }) {
           <Lock className="h-8 w-8 text-blue-600" />
           <h1 className="text-2xl font-bold text-gray-900">Vault Dashboard</h1>
         </Link>
-        <div className="flex flex-col sm:flex-row items-center gap-2">
-          <Link href={"/dashboard/profile"} className="flex items-center gap-2 cursor-pointer">
-            <User className="h-6 w-6 text-gray-500" />
-            <span className="text-sm text-gray-700">
-              {maskUserInfo(user?.fullName || user?.emailAddresses?.[0]?.emailAddress || 'User')}
-            </span>
-          </Link>
-        </div>
+        
+        <UserMenu nameOrEmail= {maskUserInfo(user?.fullName || user?.emailAddresses?.[0]?.emailAddress || 'User')}/>
       </div>
     </header>
   );
